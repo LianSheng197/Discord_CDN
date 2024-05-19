@@ -15,6 +15,18 @@ Browsing the root directory or a non-existent page no longer redirects you to th
 Add multiple tokens after `TOKEN=` in the `.env` file, separated by semicolons `,`.  
 Remember, don't add line breaks, but you can add unlimited spaces ` ` after the comma `,` to make it easier to read.
 
+## File-based store is allowed.
+It is now possible to save the `savedata.json` file under the project root.  
+Properties:
+- `data` - For redirect link cache (7 days).
+- `convertCounter` - +1 if the generate new link was successful.
+- `visitCounter` - +1 if the root directory was accessed once.
+- `redirectCounter` - +1 for a successful redirect (includes from cache).
+
+## Append 429's responding option
+Now if encounter a 429 limit from Discord, it'll wait 3 seconds for the same token and retry.  
+The error will only be responded to if it fails three times in a row.
+
 ## Append Favicon
 ![](./assets/favicon.png)  
 Favicon is produced and licensed by `asol_studio`.  

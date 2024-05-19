@@ -10,8 +10,8 @@
     "typescript": "^5.2.2"
   },
   "name": "discord_cdn",
-  "description": "Discord CDN Allows you to bypass the expiry on download links.",
-  "version": "1.0.1",
+  "description": "Discord CDN Allows you to bypass the expiry on download links. (with file-based cache and multiple tokens allowed)",
+  "version": "1.0.2",
   "main": "src/index.ts",
   "dependencies": {
     "@yarnpkg/pnpify": "^4.0.1",

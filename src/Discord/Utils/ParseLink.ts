@@ -1,7 +1,5 @@
 import ELinkIssue from "../Types/ELinkIssue";
-import ILinkData from "../Types/ILinkData";
 import IParsedLink from "../Types/IParsedLink";
-
 
 /**
  * Ensures the given `input` is in the right format so its possible to extract data from it. 

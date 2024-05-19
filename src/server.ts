@@ -4,22 +4,27 @@ import getConfig from './config';
 import Discord from './Discord/Discord';
 import favicon from 'serve-favicon';
 import path from 'path';
+import { setAutoSaveData, addVisit, addRedirect, getVisit, getConvert, getRedirect } from "./Discord/Utils/StoreJSON";
+
+setAutoSaveData();
 
 const app = express();
 let discord: Discord | null;
-let visitCounter: number = 0;
-let convertCounter: number = 0;
 
 app.use(favicon(path.join(__dirname, '..', 'assets', 'favicon.png')));
 
 app.get('/:url(*)', async (req, res) => {
+    let visitCounter: number = getVisit();
+    let convertCounter: number = getConvert();
+    let redirectCounter: number = getRedirect();
+    
     if (discord == null) return res.status(500).send("Server error.");
 
     const encodedUrl = req.params.url;
     const decodedUrl = decodeURIComponent(encodedUrl);
 
     if (decodedUrl != "favicon.ico") {
-        visitCounter += 1;
+        addVisit();
     }
 
     if (!decodedUrl.includes("attachments")) {
@@ -27,6 +32,7 @@ app.get('/:url(*)', async (req, res) => {
         <p><span>__HOST__</span>/https://cdn.discordapp.com/attachments/xxx/xxx/xxxxx.ext</p>
         <p>Visits: ${visitCounter}</p>
         <p>Generated: ${convertCounter}</p>
+        <p>Redirected: ${redirectCounter}</p>
         <script>
                 const span = document.querySelector("span");
                 span.innerText = location.origin;
@@ -35,7 +41,8 @@ app.get('/:url(*)', async (req, res) => {
     }
 
     try {
-        const fullLink = await discord.fetchLatestLink(decodedUrl, convertCounter++);
+        const fullLink = await discord.fetchLatestLink(decodedUrl);
+        addRedirect();
         res.redirect(fullLink);
     } catch (ex) {
         if (ex.message) {
