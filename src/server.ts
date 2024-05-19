@@ -2,32 +2,56 @@ console.clear();
 import express from 'express';
 import getConfig from './config';
 import Discord from './Discord/Discord';
+import favicon from 'serve-favicon';
+import path from 'path';
 
 const app = express();
 let discord: Discord | null;
+let visitCounter: number = 0;
+let convertCounter: number = 0;
+
+app.use(favicon(path.join(__dirname, '..', 'assets', 'favicon.png')));
 
 app.get('/:url(*)', async (req, res) => {
     if (discord == null) return res.status(500).send("Server error.");
 
     const encodedUrl = req.params.url;
     const decodedUrl = decodeURIComponent(encodedUrl);
-    if (decodedUrl == "" || decodedUrl == "favicon.ico") 
-        return res.redirect('https://github.com/ShufflePerson/Discord_CDN');
+
+    if (decodedUrl != "favicon.ico") {
+        visitCounter += 1;
+    }
+
+    if (!decodedUrl.includes("attachments")) {
+        return res.send(`<h1>Usage:</h1>
+        <p><span>__HOST__</span>/https://cdn.discordapp.com/attachments/xxx/xxx/xxxxx.ext</p>
+        <p>Visits: ${visitCounter}</p>
+        <p>Generated: ${convertCounter}</p>
+        <script>
+                const span = document.querySelector("span");
+                span.innerText = location.origin;
+        </script>
+        `);
+    }
 
     try {
-        const fullLink = await discord.fetchLatestLink(decodedUrl);
+        const fullLink = await discord.fetchLatestLink(decodedUrl, convertCounter++);
         res.redirect(fullLink);
     } catch (ex) {
-        if (ex.message)
+        if (ex.message) {
             console.error(ex.message);
-        else 
+        }
+        else {
             console.log(ex)
+        }
+
         res.status(502).send("Something went wrong. Please ask the Server Owner to check the Console to see the issue.")
     }
 });
 
-app.get('*', (req, res) => {
-  res.redirect('https://github.com/ShufflePerson/Discord_CDN');
+app.get('*', async (req, res) => {
+    res.statusCode = 404;
+    return res.send();
 });
 
 

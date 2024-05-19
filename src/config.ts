@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import IConfig from "./Types/IConfig";
-import VerifyToken from "./Discord/Utils/VerifyToken";
+import VerifyTokens from "./Discord/Utils/VerifyToken";
 dotenv.config();
 
 
@@ -37,8 +37,8 @@ async function getConfig(): Promise<IConfig> {
     }
 
 
-    const isValidToken = await VerifyToken(TOKEN);
-    if (bypassTokenChecks.toUpperCase() != "YES" && !isValidToken) {
+    const isValidTokens = await VerifyTokens(TOKEN);
+    if (bypassTokenChecks.toUpperCase() != "YES" && isValidTokens.length == 0) {
         throw new Error("Invalid `TOKEN` was provided.");
     }
     
@@ -52,7 +52,7 @@ async function getConfig(): Promise<IConfig> {
 
 
     cachedConfig = {
-        TOKEN,
+        TOKENS: isValidTokens,
         FALLBACK: FALLBACK.toUpperCase() == "YES",
         PORT: Number(PORT),
 

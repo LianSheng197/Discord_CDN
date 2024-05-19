@@ -116,7 +116,6 @@ This will also recompile the code.
 npm run start
 ```
 
-
 # Contact
 
-You may contact me on my Discord: `_.shuffle._`
+You may contact me on my Discord: `_.shuffle._` (Original Author)

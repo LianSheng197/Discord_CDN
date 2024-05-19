@@ -1,5 +1,5 @@
 interface IConfig {
-    TOKEN: string,
+    TOKENS: string[],
     FALLBACK: boolean,
     PORT: number,
 

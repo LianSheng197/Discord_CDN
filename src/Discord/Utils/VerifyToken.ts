@@ -12,8 +12,8 @@ function staticVerifyToken(token: string): ETokenIssue {
 
 
     //Ensure the ID is a number
-    if (isNaN( Number(decodedID) )) return ETokenIssue.ID_NOT_A_NUMBER;
-    
+    if (isNaN(Number(decodedID))) return ETokenIssue.ID_NOT_A_NUMBER;
+
     //Ensure the ID is 17 numbers or more
     if (decodedID.length < 17) return ETokenIssue.ID_TOO_SHORT;
 
@@ -23,26 +23,40 @@ function staticVerifyToken(token: string): ETokenIssue {
 
 /**
  * Ensures the given Token is a valid Discord Token.
- * @param token Discord Token
+ * @param allToken Discord Token (allowed multiple, just split by comma `,`)
  * @param performStatic ( Optional, default True ) If set, token will be checked statically without any requests to Discord. 
- * @returns a Promise<boolean> whether the given token is valid or not. 
+ * @returns a Promise<string[]> (0 elements is possible)
  * @throws If trying to pass `performStatic` as false. Read the Todo.
- * @todo Implemend the non static check
+ * @todo Implemented the non static check
  */
-async function VerifyToken(token: string, performStatic: boolean = true): Promise<boolean> {
-    let isValidToken: boolean = true;
+async function VerifyTokens(allToken: string, performStatic: boolean = true): Promise<string[]> {
+    const tokens: string[] = allToken
+        .trim()                                     // remove origin's whitespace
+        .split(/,[\ \t]*/g)                         // remove each token's whitespace
+        .filter(String)                             // remove empty string
+        .filter((v, i, a) => a.indexOf(v) === i);   // remove duplicate
 
-    if (performStatic) {
-        const tokenIssue = staticVerifyToken(token);
-        isValidToken = tokenIssue == ETokenIssue.NONE;
-        if (!isValidToken) {
-            console.log(`[ERROR] VerifyToken(): ${tokenIssue}`)
+    const mask: string = "*".repeat(72 - 7 * 2);
+    console.log(`
+Found ${tokens.length} tokens.
+${tokens.reduce((out, t, i) => out += `${i + 1} - ${t.replace(/(^.{7}).+(.{7}$)/, `$1${mask}$2`)}\n`, "")}
+    `);
+
+    let isValidTokens: string[] = [];
+    Object.entries(tokens).forEach(([i, token]) => {
+        if (performStatic) {
+            const tokenIssue = staticVerifyToken(token);
+            if (tokenIssue != ETokenIssue.NONE) {
+                console.log(`[ERROR] VerifyToken(#${i}): ${tokenIssue}`)
+            }
+
+            isValidTokens.push(token);
+        } else {
+            throw new Error("Non Static check is not yet implemented.");
         }
-    } else {
-        throw new Error("Non Static check is not yet implemented.");
-    }
+    });
 
-    return isValidToken;
+    return isValidTokens;
 }
 
-export default VerifyToken;
+export default VerifyTokens;
