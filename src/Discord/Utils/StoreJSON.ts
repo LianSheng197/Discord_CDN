@@ -28,6 +28,11 @@ export function setAutoSaveData() {
  * @param link Generated links.
  */
 export function updateResult(key: string, link: string) {
+    // If url format is expected or what, anyway, DO NOT save this data.
+    if(link === null) {
+        return;
+    }
+
     StoreData.data[key] = {
         lastGenerateTime: Date.now(),
         link: link
