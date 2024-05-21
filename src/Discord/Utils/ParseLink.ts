@@ -31,8 +31,8 @@ function ParseLink(input: string): IParsedLink {
     return {
         error: ELinkIssue.NONE,
         data: {
-            channelID: channelID,
-            fileID: fileID,
+            channelID: BigInt(channelID),
+            fileID: BigInt(fileID),
             fileName
         }
     }
