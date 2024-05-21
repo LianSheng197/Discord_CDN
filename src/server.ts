@@ -12,6 +12,9 @@ const app = express();
 let discord: Discord | null;
 
 app.use(favicon(path.join(__dirname, '..', 'assets', 'favicon.png')));
+app.use(express.urlencoded({
+    extended: true
+}));
 
 app.get('/data', (req, res) => {
     let visitCounter: number = getVisit();
@@ -23,6 +26,19 @@ app.get('/data', (req, res) => {
         generate: convertCounter,
         redirect: redirectCounter
     });
+});
+
+app.post('/api/link', async (req, res) => {
+    if (discord == null) {
+        return res.status(500).send("Server error.");
+    }
+
+    if (req.body.url === undefined) {
+        return res.send("Required parameters");
+    }
+
+    const fullLink = await discord.fetchLatestLink(req.body.url);
+    return res.send(fullLink);
 });
 
 app.get('/:url(*)', async (req, res) => {

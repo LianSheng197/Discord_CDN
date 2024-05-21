@@ -23,6 +23,11 @@ Properties:
 - `visitCounter` - +1 if the root directory was accessed once.
 - `redirectCounter` - +1 for a successful redirect (includes from cache).
 
+## Append api path `/api/link`
+- Method: `POST`
+- Param:
+  - url: `<discord-cdn-url>`
+
 ## Append 429's responding option
 Now if encounter a 429 limit from Discord, it'll wait 3 seconds for the same token and retry.  
 The error will only be responded to if it fails three times in a row.
