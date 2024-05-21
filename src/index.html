@@ -1,0 +1,162 @@
+<html class="is-large is-secondary">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <title>Discord CDN Bypass</title>
+</head>
+
+<body>
+    <div class="ts-content is-fitted">
+        <div class="ts-container is-narrow">
+            <div class="ts-tab">
+                <a href="#" class="item">Discord CDN Bypass</a>
+            </div>
+        </div>
+    </div>
+    <div class="ts-container has-vertically-padded-big is-narrow">
+        <div class="ts-header is-huge is-center-aligned is-heavy">繞過 Discord CDN 限制</div>
+        <div class="ts-text is-center-aligned has-top-spaced">
+            以前無論是把檔案還是圖片託管在 Discord 都是如此方便，直到某天加上了連結驗證及過期機制... <br><br>
+            總之這東西可以幫你取得過期網址的最新連結。
+        </div>
+        <div class="ts-header has-top-spaced-huge is-huge is-center-aligned is-heavy">如何使用</div>
+        <div class="ts-text is-center-aligned has-top-spaced">
+            直接把放在 Discord 的檔案連結輸入網址後面就可以了！（記得加上斜線） <br><br>
+            <b>或者使用底下的輸入框</b>
+        </div>
+        <div class="ts-input is-underlined">
+            <input type="text"
+                placeholder="https://cdn.discordapp.com/attachments/1081099279873085460/1211344160582410310/out9_out.mp4"
+                id="search-input">
+            <button class="ts-button" id="search-button">送出</button>
+        </div>
+        <div class="ts-grid has-top-spaced-huge is-stacked">
+            <div class="column">
+                <div class="ts-box">
+                    <div class="ts-content is-dense is-tertiary">
+                        <div class="ts-header is-center-aligned is-heavy">訪問次數</div>
+                    </div>
+                    <div class="ts-divider"></div>
+                    <div class="ts-content">
+                        <div class="ts-wrap is-center-aligned is-middle-aligned is-compact">
+                            <div class="ts-header is-huge is-heavy" id="visit-counter"></div>
+                        </div>
+                        <div class="ts-text is-secondary has-top-spaced">
+                            包含這個頁面及所有透過此網站轉跳的次數。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ts-box">
+                    <div class="ts-content is-dense is-tertiary">
+                        <div class="ts-header is-center-aligned is-heavy">連結產生次數</div>
+                    </div>
+                    <div class="ts-divider"></div>
+                    <div class="ts-content">
+                        <div class="ts-wrap is-center-aligned is-middle-aligned is-compact">
+                            <div class="ts-header is-huge is-heavy" id="generate-counter"></div>
+                            <div class="ts-text is-big is-secondary"></div>
+                        </div>
+                        <div class="ts-text is-secondary has-top-spaced">
+                            僅計算連結產生次數。 <br>
+                            同樣的檔案會把連結快取在伺服器上 7 天，這有效加速轉換效率，以及降低觸發 Discord 的 <a
+                                href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Status/429" target="_blank">HTTP
+                                429</a> 限制的可能性。 <br>
+                            只有在產生新連結的時候才會計算。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ts-box">
+                    <div class="ts-content is-dense is-tertiary">
+                        <div class="ts-header is-center-aligned is-heavy">轉跳次數</div>
+                    </div>
+                    <div class="ts-divider"></div>
+                    <div class="ts-content">
+                        <div class="ts-wrap is-center-aligned is-middle-aligned is-compact">
+                            <div class="ts-header is-huge is-heavy" id="redirect-counter"></div>
+                        </div>
+                        <div class="ts-text is-secondary has-top-spaced">
+                            用此網站轉跳到 Discord 託管的檔案的次數。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ts-divider has-top-spaced-big"></div>
+        <div class="ts-grid has-top-spaced-big">
+            <div class="column is-8-wide">
+                <div class="ts-header is-big">
+                    <span class="ts-icon is-face-smile-icon"></span>
+                </div>
+                <div class="ts-text is-description">(c) 2024 | ISC License</div>
+            </div>
+            <div class="column is-8-wide">
+                <div class="ts-header has-bottom-spaced-small">相關資訊</div>
+                <a class="ts-text is-secondary" href="https://v4.tocas-ui.com/zh-tw/index.html" target="_blank">使用 Tocas
+                    UI</a><br>
+                <a class="ts-text is-secondary" href="https://github.com/LianSheng197/Discord_CDN"
+                    target="_blank">原始碼</a><br>
+                <a class="ts-text is-secondary" href="https://www.freepik.com/icon/loop_11225541" target="_blank">網站
+                    LOGO</a><br>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        (async () => {
+            const host = location.origin;
+            const data = await fetch("/data").then(r => r.json());
+
+            /** @type {HTMLDivElement} */
+            const elVisit = document.querySelector("#visit-counter");
+            /** @type {HTMLDivElement} */
+            const elGenerate = document.querySelector("#generate-counter");
+            /** @type {HTMLDivElement} */
+            const elRedirect = document.querySelector("#redirect-counter");
+
+            /** @type {HTMLInputElement} */
+            const elSearchInput = document.querySelector("#search-input");
+            /** @type {HTMLButtonElement} */
+            const elSearchButton = document.querySelector("#search-button");
+
+            // statistics
+            elVisit.innerText = numberWithCommas(data.visit);
+            elGenerate.innerText = numberWithCommas(data.generate);
+            elRedirect.innerText = numberWithCommas(data.redirect);
+
+            // redirect
+            elSearchInput.addEventListener("keyup", ev => (ev.key === "Enter" || ev.keyCode === 13) && redirect());
+            elSearchButton.addEventListener("click", redirect);
+
+            function redirect() {
+                const url = elSearchInput.value;
+
+                if (!url.startsWith("https://") || !url.includes("/attachments/")) {
+                    alert("無效的連結格式");
+                    elSearchInput.focus();
+                    return;
+                }
+
+                location.href = `${host}/${url}`;
+            }
+
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+        })();
+    </script>
+</body>
+
+</html>

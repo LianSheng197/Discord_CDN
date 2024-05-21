@@ -13,12 +13,22 @@ let discord: Discord | null;
 
 app.use(favicon(path.join(__dirname, '..', 'assets', 'favicon.png')));
 
-app.get('/:url(*)', async (req, res) => {
+app.get('/data', (req, res) => {
     let visitCounter: number = getVisit();
     let convertCounter: number = getConvert();
     let redirectCounter: number = getRedirect();
-    
-    if (discord == null) return res.status(500).send("Server error.");
+
+    return res.send({
+        visit: visitCounter,
+        generate: convertCounter,
+        redirect: redirectCounter
+    });
+});
+
+app.get('/:url(*)', async (req, res) => {
+    if (discord == null) {
+        return res.status(500).send("Server error.");
+    }
 
     const encodedUrl = req.params.url;
     const decodedUrl = decodeURIComponent(encodedUrl);
@@ -28,16 +38,7 @@ app.get('/:url(*)', async (req, res) => {
     }
 
     if (!decodedUrl.includes("attachments")) {
-        return res.send(`<h1>Usage:</h1>
-        <p><span>__HOST__</span>/https://cdn.discordapp.com/attachments/xxx/xxx/xxxxx.ext</p>
-        <p>Visits: ${visitCounter}</p>
-        <p>Generated: ${convertCounter}</p>
-        <p>Redirected: ${redirectCounter}</p>
-        <script>
-                const span = document.querySelector("span");
-                span.innerText = location.origin;
-        </script>
-        `);
+        return res.sendFile(path.join(__dirname, "index.html"));
     }
 
     try {

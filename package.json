@@ -4,6 +4,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "axios": "^1.6.2",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "ts-node": "^10.9.1",
@@ -11,7 +12,7 @@
   },
   "name": "discord_cdn",
   "description": "Discord CDN Allows you to bypass the expiry on download links. (with file-based cache and multiple tokens allowed)",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "src/index.ts",
   "dependencies": {
     "@yarnpkg/pnpify": "^4.0.1",
@@ -93,7 +94,7 @@
     "yn": "^3.1.1"
   },
   "scripts": {
-    "start": "tsc && node ./dist/server.js",
+    "start": "tsc && copyfiles -u 1 src/**/*.html dist/ && node ./dist/server.js",
     "build": "tsc",
     "dev": "ts-node src/dev.ts",
     "setup": "npm install"
