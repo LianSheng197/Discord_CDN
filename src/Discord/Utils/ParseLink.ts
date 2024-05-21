@@ -32,7 +32,7 @@ function ParseLink(input: string): IParsedLink {
         error: ELinkIssue.NONE,
         data: {
             channelID: Number(channelID),
-            fileID: Number(channelID),
+            fileID: Number(fileID),
             fileName
         }
     }
