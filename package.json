@@ -12,7 +12,7 @@
   },
   "name": "discord_cdn",
   "description": "Discord CDN Allows you to bypass the expiry on download links. (with file-based cache and multiple tokens allowed)",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "src/index.ts",
   "dependencies": {
     "@yarnpkg/pnpify": "^4.0.1",

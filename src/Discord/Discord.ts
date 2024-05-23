@@ -29,9 +29,9 @@ class Discord {
         const key = `${linkData.data.channelID}/${linkData.data.fileID}/${linkData.data.fileName}`;
         const dResult = getResult(key);
 
-        // Discord's current policy is to set the past due date at 14 days after the request. 
-        // Here the cache date is set to 7 days.
-        if (dResult !== null && Date.now() - dResult.lastGenerateTime < 7 * 86400 * 1000) {
+        // Discord's current policy is to set the past due date at 3 hours after the request. 
+        // Here the cache date is set to 1 hour.
+        if (dResult !== null && Date.now() - dResult.lastGenerateTime < 3600 * 1000) {
             return dResult.link;
         }
 

@@ -3,6 +3,12 @@ Updates any old/expired Discord download links.
 - Original Author: [ShufflePerson](https://github.com/ShufflePerson/Discord_CDN)
 - Original Readme: [Readme_old.md](./Readme_old.md)
 
+## How to get your token
+1. Open Discord on your Browser. 
+2. Open the Dev Tools ( Inspect Element )
+3. Go to the Console Tab and paste in the following command
+4. `console.log((webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken());`
+5. Copy the output and set it in the `.env` file. (e.g `TOKEN=PASTE_TOKEN_HERE`)
 
 # What's the differents
 
@@ -18,7 +24,8 @@ Remember, don't add line breaks, but you can add unlimited spaces ` ` after the 
 ## File-based store is allowed.
 It is now possible to save the `savedata.json` file under the project root.  
 Properties:
-- `data` - For redirect link cache (7 days).
+- `data` - For redirect link cache.  
+  (Discord update the link's expire time to 3 hours, so this server change cache time to 1 hour).
 - `convertCounter` - +1 if the generate new link was successful.
 - `visitCounter` - +1 if the root directory was accessed once.
 - `redirectCounter` - +1 for a successful redirect (includes from cache).
